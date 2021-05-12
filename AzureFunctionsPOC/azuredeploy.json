@@ -11,9 +11,16 @@
     },
     "sku": {
       "type": "string",
+      "defaultValue": "Free",
+      "metadata": {
+        "description": "The Name of App Service Plan."
+      }
+    },
+    "skuCode": {
+      "type": "string",
       "defaultValue": "F1",
       "metadata": {
-        "description": "The SKU of App Service Plan."
+        "description":  "The SKU of the App Service Plan"
       }
     },
     "language": {
@@ -37,10 +44,17 @@
     }
   },
   "variables": {
-    "webAppName": "[concat('td-hopefulmommadesigns-ui', '-', parameters('environment'))]",
+    "webAppName": "[concat('testWebApp', '-', parameters('environment'))]",
+    "webAppServicePlanName": "[concat('testWebApp', '-', parameters('environment'))]",
     "appServicePlanName": "[concat('azurefunctionspoc', '-', parameters('environment'))]",
     "functionAppName": "AzureFunctionPOC",
     "storageAccountName": "AzureFunctionPOC",
+    "currentStack": "dotnet",
+    "netFrameworkVersion": "v4.0",
+    "alwaysOn": false,
+    "workerSize": "0",
+    "workerSizeId": 0,
+    "numberOfWorkers": "1",        
     "configReference": {
       ".net": {
         "comments": ".Net app. No additional configuration needed."
@@ -62,6 +76,94 @@
     }
   },
   "resources": [
+    {
+      "apiVersion": "2020-06-01",
+      "name": "App Service",
+      "type": "Microsoft.Web/sites",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/components/', variables('webAppName'))]",
+        "[resourceId('Microsoft.Web/serverfarms/', variables('webAppServicePlanName'))]"
+      ],
+      "properties": {
+        "name": "[variables('webAppName')]",
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('microsoft.insights/components/', variables('webAppName')), '2018-05-01-preview').InstrumentationKey]"
+            },
+            {
+              "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+              "value": "~2"
+            },
+            {
+              "name": "XDT_MicrosoftApplicationInsights_Mode",
+              "value": "default"
+            },
+            {
+              "name": "DiagnosticServices_EXTENSION_VERSION",
+              "value": "disabled"
+            },
+            {
+              "name": "APPINSIGHTS_PROFILERFEATURE_VERSION",
+              "value": "disabled"
+            },
+            {
+              "name": "APPINSIGHTS_SNAPSHOTFEATURE_VERSION",
+              "value": "disabled"
+            },
+            {
+              "name": "InstrumentationEngine_EXTENSION_VERSION",
+              "value": "disabled"
+            },
+            {
+              "name": "SnapshotDebugger_EXTENSION_VERSION",
+              "value": "disabled"
+            },
+            {
+              "name": "XDT_MicrosoftApplicationInsights_BaseExtensions",
+              "value": "disabled"
+            }
+          ],
+          "metadata": [
+            {
+              "name": "CURRENT_STACK",
+              "value": "[variables('currentStack')]"
+            }
+          ],
+          "netFrameworkVersion": "[variables('netFrameworkVersion')]",
+          "alwaysOn": "[variables('alwaysOn')]"
+        },
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('webAppServicePlanName'))]",
+        "clientAffinityEnabled": true
+      }
+    },
+    {
+      "apiVersion": "2020-06-01",
+      "name": "Web App Service Plan",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[parameters('location')]",
+      "properties": {
+        "name": "[variables('webAppServicePlanName')]",
+        "workerSize": "[variables('workerSize')]",
+        "workerSizeId": "[variables('workerSizeId')]",
+        "numberOfWorkers": "[variables('numberOfWorkers')]"
+      },
+      "sku": {
+        "Tier": "[parameters('sku')]",
+        "Name": "[parameters('skuCode')]"
+      }
+    },
+    {
+      "apiVersion": "2020-02-02-preview",
+      "name": "Web Application insights",
+      "type": "microsoft.insights/components",
+      "location": "[parameters('location')]",
+      "properties": {
+        "ApplicationId": "[variables('webAppName')]"
+      }
+    },
     {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "Storage Account",
