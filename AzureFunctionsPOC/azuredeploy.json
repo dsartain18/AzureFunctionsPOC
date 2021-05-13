@@ -78,9 +78,12 @@
   "resources": [
     {
       "apiVersion": "2020-06-01",
-      "name": "App Service",
+      "name": "[variables('webAppName')]",
       "type": "Microsoft.Web/sites",
       "location": "[parameters('location')]",
+      "tags": {
+        "displayName": "Web App Service"
+      },
       "dependsOn": [
         "[resourceId('Microsoft.Insights/components/', variables('webAppName'))]",
         "[resourceId('Microsoft.Web/serverfarms/', variables('webAppServicePlanName'))]"
@@ -141,9 +144,12 @@
     },
     {
       "apiVersion": "2020-06-01",
-      "name": "Web App Service Plan",
+      "name": "[variables('webAppServicePlanName')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[parameters('location')]",
+      "tags": {
+        "displayName": "Web App Service Plan"
+      },
       "properties": {
         "name": "[variables('webAppServicePlanName')]",
         "workerSize": "[variables('workerSize')]",
@@ -181,8 +187,11 @@
     {
       "type": "Microsoft.Web/serverfarms",
       "apiVersion": "2016-09-01",
-      "name": "App Service Plan",
+      "name": "[variables('appServicePlanName')]",
       "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "App Service Plan"
+      },
       "properties": {
         "name": "[variables('appServicePlanName')]",
         "computeMode": "Dynamic"
@@ -211,9 +220,12 @@
     {
       "apiVersion": "2016-03-01",
       "type": "Microsoft.Web/sites",
-      "name": "Function App",
+      "name": "[variables('functionAppName')]",
       "location": "[resourceGroup().location]",
       "kind": "functionapp",
+      "tags": {
+        "displayName": "Function App"
+      },
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', variables('appServicePlanName'))]"
       ],
