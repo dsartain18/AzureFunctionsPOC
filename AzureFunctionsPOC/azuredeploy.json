@@ -48,13 +48,13 @@
     "webAppServicePlanName": "[concat('testWebApp', '-', parameters('environment'))]",
     "appServicePlanName": "[concat('azurefunctionspoc')]",
     "functionAppName": "AzureFunctionPOC",
-    "storageAccountName": "AzureFunctionPOC",
+    "storageAccountName": "[concat('azurefunctionspoc'), parameters('environment')]",
     "currentStack": "dotnet",
     "netFrameworkVersion": "v4.0",
     "alwaysOn": false,
     "workerSize": "0",
     "workerSizeId": 0,
-    "numberOfWorkers": "1",        
+    "numberOfWorkers": "1",
     "configReference": {
       ".net": {
         "comments": ".Net app. No additional configuration needed."
@@ -176,7 +176,7 @@
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[concat(variables('appServicePlanName'),parameters('environment')]",
+      "name": "[variables('storageAccountName')",
       "apiVersion": "2019-06-01",
       "location": "[resourceGroup().location]",
       "kind": "StorageV2",
@@ -231,7 +231,7 @@
         "displayName": "Function App"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', [concat(variables('appServicePlanName'), parameters('environment'))])]"
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
       ],
       "properties": {
         "siteConfig": {
