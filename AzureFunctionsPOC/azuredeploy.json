@@ -46,7 +46,7 @@
   "variables": {
     "webAppName": "[concat('testWebApp', '-', parameters('environment'))]",
     "webAppServicePlanName": "[concat('testWebApp', '-', parameters('environment'))]",
-    "appServicePlanName": "[concat('azurefunctionspoc')]",
+    "appServicePlanName": "[concat('AzureFunctionsPOC', '-', parameters('environment'))]",
     "functionAppName": "AzureFunctionPOC",
     "storageAccountName": "[concat('azurefunctionspoc', parameters('environment'))]",
     "currentStack": "dotnet",
@@ -176,8 +176,8 @@
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('storageAccountName')",
       "apiVersion": "2019-06-01",
+      "name": "[variables('storageAccountName')]",
       "location": "[resourceGroup().location]",
       "kind": "StorageV2",
       "tags": {
