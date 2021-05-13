@@ -47,7 +47,7 @@
     "webAppName": "[concat('testWebApp', '-', parameters('environment'))]",
     "webAppServicePlanName": "[concat('testWebApp', '-', parameters('environment'))]",
     "appServicePlanName": "[concat('AzureFunctionsPOC', '-', parameters('environment'))]",
-    "functionAppName": "AzureFunctionPOC",
+    "functionAppName": "[concat('AzureFunctionPOC', '-', parameters('environment'))]",
     "storageAccountName": "[concat('azurefunctionspoc', parameters('environment'))]",
     "currentStack": "dotnet",
     "netFrameworkVersion": "v4.0",
