@@ -46,7 +46,7 @@
   "variables": {
     "webAppName": "[concat('testWebApp', '-', parameters('environment'))]",
     "webAppServicePlanName": "[concat('testWebApp', '-', parameters('environment'))]",
-    "appServicePlanName": "[concat('azurefunctionspoc', '-', parameters('environment'))]",
+    "appServicePlanName": "[concat('azurefunctionspoc')]",
     "functionAppName": "AzureFunctionPOC",
     "storageAccountName": "AzureFunctionPOC",
     "currentStack": "dotnet",
@@ -176,7 +176,7 @@
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('appServicePlanName')]",
+      "name": "[concat(variables('appServicePlanName'),parameters('environment')]",
       "apiVersion": "2019-06-01",
       "location": "[resourceGroup().location]",
       "kind": "StorageV2",
@@ -184,19 +184,20 @@
         "displayName": "Function App Storage Account"
       },
       "sku": {
-        "name": "[variables('appServicePlanName')]"
+        "name": "Standard_LRS",
+        "tier": "Standard"
       }
     },
     {
       "type": "Microsoft.Web/serverfarms",
       "apiVersion": "2016-09-01",
-      "name": "[variables('appServicePlanName')]",
+      "name": "[concat(variables('appServicePlanName'), '-', parameters('environment')]",
       "location": "[resourceGroup().location]",
       "tags": {
         "displayName": "App Service Plan"
       },
       "properties": {
-        "name": "[variables('appServicePlanName')]",
+        "name": "[concat(variables('appServicePlanName'), '-', parameters('environment')]",
         "computeMode": "Dynamic"
       },
       "sku": {
@@ -230,7 +231,7 @@
         "displayName": "Function App"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', variables('appServicePlanName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', concat(variables('appServicePlanName'), parameters('environment')))]"
       ],
       "properties": {
         "siteConfig": {
