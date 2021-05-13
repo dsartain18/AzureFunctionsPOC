@@ -156,12 +156,16 @@
       }
     },
     {
-      "apiVersion": "2020-02-02-preview",
-      "name": "Web Application insights",
-      "type": "microsoft.insights/components",
-      "location": "[parameters('location')]",
+      "name": "[variables('webAppName')]",
+      "type": "Microsoft.Insights/components",
+      "apiVersion": "2015-05-01",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "Web App Insights"
+      },
+      "kind": "other",
       "properties": {
-        "ApplicationId": "[variables('webAppName')]"
+        "Application_Type": "other"
       }
     },
     {
