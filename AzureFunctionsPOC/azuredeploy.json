@@ -176,10 +176,13 @@
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "Storage Account",
+      "name": "[variables('appServicePlanName')]",
       "apiVersion": "2019-06-01",
       "location": "[resourceGroup().location]",
       "kind": "StorageV2",
+      "tags": {
+        "displayName": "Function App Storage Account"
+      },
       "sku": {
         "name": "[variables('appServicePlanName')]"
       }
