@@ -231,7 +231,7 @@
         "displayName": "Function App"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', concat(variables('appServicePlanName'), parameters('environment')))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', [concat(variables('appServicePlanName'), parameters('environment'))])]"
       ],
       "properties": {
         "siteConfig": {
